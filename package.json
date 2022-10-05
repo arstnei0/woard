@@ -1,0 +1,11 @@
+{
+	"name": "woard",
+	"version": "1.0.0",
+	"scripts": {
+		
+	},
+	"license": "MIT",
+	"workspaces": [
+		"packages/*"
+	]
+}
