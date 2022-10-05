@@ -10,5 +10,7 @@ import Router from './router'
 import App from './app'
 
 ReactDOM.createRoot(document.querySelector('#root') as HTMLElement).render(
-  <App><Router></Router></App>
+    <App>
+        <Router></Router>
+    </App>,
 )
