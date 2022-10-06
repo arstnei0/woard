@@ -15,9 +15,11 @@ import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded'
 import MenuOpenRoundedIcon from '@mui/icons-material/MenuOpenRounded'
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded'
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded'
+import LaptopRoundedIcon from '@mui/icons-material/LaptopRounded'
 
-import { mainListItems, secondaryListItems } from './SidebarList'
-import { useTheme } from '../theme'
+import SidebarList from './SidebarList'
+import { useTheme, Mode, getModeDescription } from '../theme'
+import { Tooltip } from '@mui/material'
 
 const drawerWidth = 240
 
@@ -70,7 +72,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 )
 
 export default function HeaderMenu() {
-    const { colorMode, theme } = useTheme()
+    const { colorMode, theme, mode } = useTheme()
 
     const [open, setOpen] = React.useState(true)
 
@@ -78,12 +80,14 @@ export default function HeaderMenu() {
         setOpen(!open)
     }
 
+    const modeDescription = React.useMemo(() => getModeDescription(mode), [mode])
+
     return (
         <>
             <AppBar position='absolute' open={open}>
                 <Toolbar
                     sx={{
-                        pr: '24px', // keep right padding when drawer closed
+                        pr: '24px',
                     }}
                 >
                     <IconButton
@@ -98,27 +102,40 @@ export default function HeaderMenu() {
                     >
                         <MenuRoundedIcon />
                     </IconButton>
-                    {open ? <Typography sx={{ flexGrow: 1 }}></Typography> : <Typography
-                        component='h1'
-                        variant='h6'
-                        color='inherit'
-                        noWrap
-                        sx={{ flexGrow: 1 }}
-                    >
-                        Dashboard
-                    </Typography>}
+                    {open ? (
+                        <Typography sx={{ flexGrow: 1 }}></Typography>
+                    ) : (
+                        <Typography
+                            component='h1'
+                            variant='h5'
+                            color='inherit'
+                            noWrap
+                            sx={{ flexGrow: 1 }}
+                        >
+                            Dashboard
+                        </Typography>
+                    )}
+
+                    <Tooltip title={modeDescription} arrow>
+                        <IconButton
+                            sx={{ ml: 1 }}
+                            onClick={colorMode.toggleColorMode}
+                            color='inherit'
+                        >
+                            {mode === Mode.system ? (
+                                <LaptopRoundedIcon />
+                            ) : mode === Mode.light ? (
+                                <LightModeRoundedIcon />
+                            ) : (
+                                <DarkModeRoundedIcon />
+                            )}
+                        </IconButton>
+                    </Tooltip>
 
                     <IconButton color='inherit'>
                         <Badge badgeContent={0} color='secondary'>
                             <NotificationsIcon />
                         </Badge>
-                    </IconButton>
-                    <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color='inherit'>
-                        {theme.palette.mode === 'dark' ? (
-                            <LightModeRoundedIcon />
-                        ) : (
-                            <DarkModeRoundedIcon />
-                        )}
                     </IconButton>
                 </Toolbar>
             </AppBar>
@@ -147,9 +164,7 @@ export default function HeaderMenu() {
                 </Toolbar>
                 <Divider />
                 <List component='nav'>
-                    {mainListItems}
-                    <Divider sx={{ my: 1 }} />
-                    {secondaryListItems}
+                    <SidebarList />
                 </List>
             </Drawer>
         </>

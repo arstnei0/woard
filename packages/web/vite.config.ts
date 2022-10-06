@@ -8,7 +8,7 @@ export default defineConfig({
             include: [
                 /\.[tj]sx?$/,
             ],
-            imports: ['react', 'react-router-dom'],
+            imports: ['react'],
             eslintrc: {
                 enabled: true,
             },

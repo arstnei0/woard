@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper'
 import Link from '@mui/material/Link'
 import { initTheme, useTheme } from './theme'
 
+import Router from './logic/router'
 import Menu from './components/Menu'
 
 function Copyright(props: any) {
@@ -25,7 +26,7 @@ function Copyright(props: any) {
     )
 }
 
-export default function App(props: { children: React.ReactNode }) {
+export default function App(props: {}) {
     initTheme()
 
     const { theme } = useTheme()
@@ -50,7 +51,7 @@ export default function App(props: { children: React.ReactNode }) {
                 >
                     <Toolbar />
                     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3}>
+                        {/* <Grid container spacing={3}>
                             <Grid item xs={12} md={8} lg={9}>
                                 <Paper
                                     sx={{
@@ -78,7 +79,8 @@ export default function App(props: { children: React.ReactNode }) {
                                     sx={{ p: 2, display: 'flex', flexDirection: 'column' }}
                                 ></Paper>
                             </Grid>
-                        </Grid>
+                        </Grid> */}
+                        <Router></Router>
                         <Copyright sx={{ pt: 4 }} />
                     </Container>
                 </Box>

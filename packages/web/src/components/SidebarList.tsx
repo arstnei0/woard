@@ -11,52 +11,42 @@ import LayersIcon from '@mui/icons-material/Layers'
 import AssignmentIcon from '@mui/icons-material/Assignment'
 import ViewKanbanRoundedIcon from '@mui/icons-material/ViewKanbanRounded'
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded'
+import { useLocation } from 'wouter'
 
-export const mainListItems = (
-    <React.Fragment>
-        <ListItemButton>
-            <ListItemIcon>
-                <DashboardRoundedIcon />
-            </ListItemIcon>
-            <ListItemText primary='Dashboard' />
-        </ListItemButton>
-        <ListItemButton>
-            <ListItemIcon>
-                <ViewKanbanRoundedIcon />
-            </ListItemIcon>
-            <ListItemText primary='Kanban' />
-        </ListItemButton>
-        <ListItemButton>
-            <ListItemIcon>
-                <CalendarMonthRoundedIcon />
-            </ListItemIcon>
-            <ListItemText primary='Calendar' />
-        </ListItemButton>
-    </React.Fragment>
-)
+export const SidebarList: React.FC<{}> = (props) => {
+    const [location, setLocation] = useLocation()
 
-export const secondaryListItems = (
-    <React.Fragment>
-        {/* <ListSubheader component="div" inset>
-      Saved reports
-    </ListSubheader>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItemButton> */}
-    </React.Fragment>
-)
+    return (
+        <>
+            <ListItemButton
+                selected={location.startsWith('/dashboard')}
+                onClick={() => setLocation('/dashboard')}
+            >
+                <ListItemIcon>
+                    <DashboardRoundedIcon />
+                </ListItemIcon>
+                <ListItemText primary='Dashboard' />
+            </ListItemButton>
+            <ListItemButton
+                selected={location.startsWith('/location')}
+                onClick={() => setLocation('/location')}
+            >
+                <ListItemIcon>
+                    <ViewKanbanRoundedIcon />
+                </ListItemIcon>
+                <ListItemText primary='Kanban' />
+            </ListItemButton>
+            <ListItemButton
+                selected={location.startsWith('/calendar')}
+                onClick={() => setLocation('/calendar')}
+            >
+                <ListItemIcon>
+                    <CalendarMonthRoundedIcon />
+                </ListItemIcon>
+                <ListItemText primary='Calendar' />
+            </ListItemButton>
+        </>
+    )
+}
+
+export default SidebarList

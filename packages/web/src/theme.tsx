@@ -1,27 +1,51 @@
 import * as React from 'react'
 import { styled, createTheme, ThemeProvider, Theme } from '@mui/material/styles'
+import type { Palette } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
+export enum Mode {
+    'light' = '1',
+    'dark' = '2',
+    'system' = '3',
+}
+
 let theme: Theme
-let mode: 'light' | 'dark'
-let setMode: React.Dispatch<React.SetStateAction<'light' | 'dark'>>
+let mode: Mode
+let setMode: React.Dispatch<React.SetStateAction<Mode>>
 let colorMode: {
     toggleColorMode: () => void
 }
 
-export function initTheme() {
-    const systemPrefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
-    const memoryPerfersDarkMode = localStorage.getItem('perfersDarkMode') === 'yes'
+export const modeDescriptions = {
+    [Mode.dark]: 'Dark Mode',
+    [Mode.light]: 'Light Mode',
+    [Mode.system]: 'Follow System Prefered Mode',
+}
 
-    ;[mode, setMode] = React.useState<'light' | 'dark'>(
-        memoryPerfersDarkMode ? 'dark' : systemPrefersDarkMode ? 'dark' : 'light',
-    )
+export const getModeDescription = (mode: Mode) => modeDescriptions[mode]
+
+const MODE_PREFER = 'modePrefer'
+
+export function initTheme() {
+    if (!localStorage.getItem(MODE_PREFER)) localStorage.setItem(MODE_PREFER, Mode.system)
+
+    const modePreferOrigin: Mode = localStorage.getItem('modePrefer') as Mode
+    const systemPreferedMode: 'dark' | 'light' = useMediaQuery('(prefers-color-scheme: dark)')
+        ? 'dark'
+        : 'light'
+
+    ;[mode, setMode] = React.useState<Mode>(modePreferOrigin)
 
     theme = React.useMemo(
         () =>
             createTheme({
                 palette: {
-                    mode,
+                    mode:
+                        mode === Mode.dark
+                            ? 'dark'
+                            : mode === Mode.light
+                            ? 'light'
+                            : systemPreferedMode,
                 },
             }),
         [mode],
@@ -31,9 +55,16 @@ export function initTheme() {
         () => ({
             toggleColorMode: () => {
                 setMode((prevMode) => {
-                    localStorage.setItem('perfersDarkMode', prevMode === 'dark' ? 'no' : 'yes')
+                    const newMode =
+                        prevMode === Mode.light
+                            ? Mode.dark
+                            : prevMode === Mode.dark
+                            ? Mode.system
+                            : Mode.light
 
-                    return prevMode === 'light' ? 'dark' : 'light'
+                    localStorage.setItem(MODE_PREFER, newMode)
+
+                    return newMode
                 })
             },
         }),
